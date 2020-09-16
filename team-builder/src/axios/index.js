@@ -4,9 +4,9 @@ import { v4 as uuid } from 'uuid'
 const initialWorkerList = [
   {
     id: uuid(), // uuid is a lib to generate random, unique ids
-    username: 'Michael',
-    email: 'michael@michael.com',
-    role: 'Student',
+    name: 'Michael',
+    email: 'michael@Scott.com',
+    role: 'Boss',
   },
 ]
 

@@ -4,7 +4,7 @@ import Form from './components/Form'
 import axios from './axios'
 
 const dummyList = [
-  { name: 'Fido', email: 'dog@dog.com', role:'doggy'},   // this is default first thing that shows up on page
+  { name: '', email: '', role:''},   // this is default first thing that shows up on page
 ]
 
 const initialFormValues = { // this is the intial values and used to reset the submit button
@@ -16,29 +16,26 @@ export default function App() {
 const [workers, setWorker] = useState(dummyList)   //This holds my workers and adds new workers with setWorker
 const [formValues, setFormValues] = useState(initialFormValues) // this holds my intiallist and resets with that same list
 
-  const updateForm = (inputName, inputValue) => {
-    setFormValues({ ...formValues, [inputName]: inputValue })
+  const updateForm = (inputName, inputValue) => {       // Updates formValues by bringing in what Name needs updating and what values will it change to.
+    setFormValues({ ...formValues, [inputName]: inputValue })  // Spreads object to add a value to given name (could be name,role,email)
   }
 
-  const submitForm = () => {
-      const newWorker = {
+  const submitForm = () => {            // this triggers when onSumbit is fired from a submit button click
+      const newWorker = {               // newWorker is a new object holding the values inside all 3 text boxes and assigned them to their holder
         name: formValues.name.trim(),
         email: formValues.email.trim(),
         role: formValues.role.trim(),
       }
 
-    //  b) prevent further action if either username or email or role is empty string after trimming
-    if (!newWorker.name || !newWorker.email || !newWorker.role) {
+    if (!newWorker.name || !newWorker.email || !newWorker.role) {  //this checks to see if empty data is being passed and kicks us out so we dont make a partial or empty newworker
       return
     }
-    //  c) POST new friend to backend, and on success update the list of friends in state with the new friend from API
-    //  d) also on success clear the form
    
-    axios.post('fakeapi.com', newWorker)  //newfriend is res.data
+    axios.post('fakeapi.com', newWorker)  //newWorker is res.data and it posts it there for us later to grab it and show it on the screen
       .then(res => {
         
-        setWorker([res.data, ...workers])
-        setFormValues(initialFormValues)
+        setWorker([res.data, ...workers])  // Sets workers to whats inside newWorker + what was there before
+        setFormValues(initialFormValues) // Sets the formvalues back to nother so we can accept more workers
        
       })
       .catch(err => {
@@ -46,12 +43,12 @@ const [formValues, setFormValues] = useState(initialFormValues) // this holds my
       })
   }
 
-  useEffect(() => {
+  useEffect(() => {                                            //This is going through and call the dummy axios that has the newworker+workers and sets workers to that.
     axios.get('fakeapi.com').then(res => setWorker(res.data))
   }, [])
 
-
-
+// We Make a title called Form app and underneath we have 3 text boxes and then display one worker plus any new workers that are typed in and submitted
+// workers.map goes through all the workers instead of it and displays them
     return (
       <div className='container'>
         <h1>Form App</h1>
@@ -65,53 +62,10 @@ const [formValues, setFormValues] = useState(initialFormValues) // this holds my
         />
       {
         workers.map((worker, idx) => {
-          return <div key={idx}>{worker.name} has an email of {worker.email} and works as a {worker.role}</div>
+          return <div className="showstuff" key={idx}>{worker.name} has an email of {worker.email} and works as a {worker.role}</div>
         })
        }
       </div>
     )
   }
 
-
-  
-
-
-
-
-
-{/* <div className='container'>
-<h1>Workers Form</h1>
-
-{
-  workers.map((worker, idx) => {
-    return <div key={idx}>{worker.name} has an email of {worker.email} and works as a {worker.role}</div>
-  })
-}
-
-<form onSubmit={submit}>
-  <input name='name' type="text" value={formValues.name} onChange={change} />
-  <input name='email' type="text" value={formValues.email} onChange={change} />
-  <input name='role' type="text" value={formValues.role} onChange={change} />
-  <button>submit</button>
-</form>
-</div> */}
-
-
- // const change = evt => {  
-  //   // change code
-  //   const { name, value } = evt.target
-  //   setFormValues({ ...formValues, [name]: value}) // name will be either role/name/email
-  // }
-  // const submit = evt => {
-  // // submit code
-  
-  // evt.preventDefault()
-  //     const newWorker = {
-  //       name: formValues.name.trim(),
-  //       email: formValues.email.trim(),
-  //       role: formValues.role.trim(),
-  //   }
-   
-  //   setWorker([...workers, newWorker])
-  //   setFormValues(initialFormValues)
-  // }
